@@ -10,4 +10,4 @@ These codes are based on:
 Bulk parameterization of air sea fluxes: updates and verification for the
 COARE algorithm, J. Climate, 16, 571-590.*
 
-For more information, see [coare30a_readme_1](coare30a_readme_1.pdf).
+For more information, see [coare30a_readme_1](coare30a_readme_1.pdf) produced by Chris Fairall and Frank Bradley.
