@@ -55,6 +55,7 @@ m_proj('stereographic','lat',90,'long',30,'radius',25);
 
 % Plot ice speed
 m_pcolor(EASE_lon,EASE_lat,Spd);
+shading flat;
 
 % Add coastlines and grid
 m_coast('patch',[0.8,0.8,0.8],'edgecolor','none');
