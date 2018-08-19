@@ -20,10 +20,9 @@ function [Rs,alf_sky] = BCSM(R_et,Z,P)
 % ** Note: 
 % The Bird (1994) model uses a spectral parameterization while Hipsey et.
 % al. (2017) convert that into a bulk form.  In some cases it is difficult
-% to see whether the two versions match.
-% Further, there are some cases where model parameters used in GLM were 
-% unclear, so some assumptions have been made have been made about these
-% values.
+% to see whether the two versions match. Further, there are some cases 
+% where model parameters used in GLM were unclear, so some assumptions have
+% been made have been made about these values.
 
 
 
