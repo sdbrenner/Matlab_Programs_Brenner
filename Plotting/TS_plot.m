@@ -24,39 +24,42 @@ function TS_plot(CT,SA,ColVar,CT_range,SA_range,Col_range)
 % Samuel Brenner, 2018
 
 
-%% Check number of inputs and fill unused inputs with empty [];
+%% Check number of inputs and fill unused inputs with default values
+
+% Throw an error if CT and SA are not both specified
 if nargin < 2
     error('Must specify at least CT and SA');
-elseif nargin == 2
-    ColVar = [];
-    CT_range = [];
-    SA_range= [];
-    Col_range = [];
-elseif nargin == 3
-    CT_range = [];
-    SA_range= [];
-    Col_range = [];
-elseif nargin == 4
-    SA_range= [];
-    Col_range = [];
-elseif nargin == 5
-    Col_range = []; 
 end
+
+% If ColVar is not specified, replace with empty (useful later)
+if nargin < 3; ColVar = []; end
+    
+    
+% Default values for plotting ranges
+CT_range_default = [floor(9*min(CT(:)))/10 ceil(11*max(CT(:)))/10 ];
+SA_range_default = [floor(9*min(SA(:)))/10 ceil(11*max(SA(:)))/10 ];
+Col_range_default = [floor(9*min(ColVar(:)))/10 ceil(11*max(ColVar(:)))/10 ];
+
+% Replace variables by default values if they're not specified
+if nargin < 6; Col_range = Col_range_default;   end
+if nargin < 5; SA_range  = SA_range_default;    end
+if nargin < 4; CT_range  = CT_range_default;    end
+
+
 
 %% Organize data and error checking
 
-% Check that CT and SA are the same size and throw error if they don't
-% match
+% Check that CT and SA are the same size and throw error if they aren't
 if any( size(CT)~=size(SA) )
     error('CT and SA must be of the same size');
 end
 
-% If ColVar is non empty, check that it is also the same size.
+% If ColVar is specified check that it is also the same size
 if any( size(ColVar)~=size(CT) ) && ~isempty(ColVar)
     warning('Size of ColVar variable does not match size of CT, SA.  ColVar not used');
 end
     
-% Change data varibles into column vectors (accounts for matrix inputs).
+% Change data varibles into column vectors (accounts for matrix inputs)
 CT = CT(:);
 SA = SA(:);
 ColVar = ColVar(:);    
@@ -67,29 +70,11 @@ if ~isempty(ColVar) && length(ColVar) == length(CT)
     CT = CT(idx);
     SA = SA(idx);
 end
-
-
-%% Set default values:
-
-% If CT_range, SA_range, and Col_range aren't specified, set the range to 
-% go from 90% of the lowest data point to 110% of the highest data point, 
-% rounded up or down as appropriate to the nearest tenth.
-if isempty(CT_range)
-    CT_range = [floor(9*min(CT))/10 ceil(11*max(CT))/10 ];
-end
-if isempty(SA_range)
-    SA_range = [floor(9*min(SA))/10 ceil(11*max(SA))/10 ];
-end   
-if isempty(Col_range) && ~isempty(ColVar)
-    Col_range = [floor(9*min(ColVar))/10 ceil(11*max(ColVar))/10 ];
-elseif isempty(Col_range) && isempty(ColVar)
+ 
+% If ColVar is not specified or the wrong length, replace with grey
+if  isempty(ColVar) || length(ColVar)~=length(CT)
+    ColVar = [0.5,0.5,0.5];
     Col_range = [0,1];
-end    
-
-if isempty(ColVar) || length(ColVar)~=length(CT)
-    % if ColVar is not specified or of the wrong length, replace with
-    % 'black'
-    ColVar = [0,0,0];
 end
 
 %% Generate curves of CT vs SA:
@@ -106,26 +91,19 @@ clabel(c,hContour) % default labels
 
 %% Overlay T-S Points onto sigma curves
 
-sz = 5; % point size.
+sz = 5; % point size
 hold on;
 scatter(SA,CT,sz,ColVar,....
         'filled',...
         'MarkerEdgeColor','none');
+hold off;    
 set(gca,'xlim',SA_range,...
         'ylim',CT_range,...
         'clim',Col_range);
         
-%% Labelling
-
+% Labelling
 xlabel('S_A');
 ylabel('\Theta');
 
-% modify hidden properties of curves to include '?' symbol
-% (apparently this doesn't work inside the function?)
-N = length( hContour.TextPrims );
-for n = 1:N
-    hContour.TextPrims(n).String = [hContour.TextPrims(n).String,'?'];
-end
-hold off;
 
 end
