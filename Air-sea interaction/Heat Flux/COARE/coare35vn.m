@@ -17,7 +17,7 @@ function A=coare35vn(u,zu,t,zt,rh,zq,P,ts,Rs,Rl,lat,zi,rain,cp,sigH,jcool)
 %     jcool=0 if Ts is true ocean skin temperature. 
 %********************************************************************
 
-jcool=1;
+% jcool=1;
 
 % The code assumes u,t,rh,ts are vectors; 
 % sensor heights zu,zt,zl, latitude lat, and PBL height zi are constants;

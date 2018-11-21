@@ -1,4 +1,6 @@
 function colour = cinterp(data, clim, cmap)
+% colour = CINTERP(data, clim, cmap)
+%
 % Colour interpolation:
 % Given a colormap (cmap) with limits defined by clim, i.e:
 %   colormap(cmap);
