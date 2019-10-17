@@ -1,9 +1,9 @@
 function  cmap = ucar(m)
 %UCAR   Ice concentration colour map
 %   UCAR(M) returns an M-by-3 matrix containing the UCAR colormap.
-%   By itself, UCAR is length 101, and corresponds to color axis limits of
+%   By default, UCAR is length 101, and corresponds to color axis limits of
 %   [ -0.0100, 1 ];
-%   A custom length M is not recommended.
+%   A custom length M is NOT recommended.
 
 n = 101;
 if nargin <1; m = n; end % default value

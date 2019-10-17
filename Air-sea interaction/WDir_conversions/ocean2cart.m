@@ -23,18 +23,6 @@ function [U,V] = ocean2cart(DIR,R,convention,units)
 % S. Brenner, 2018
 
 
-
-transforms corresponding elements of data
-%   stored in Cartesian coordinates X,Y to polar coordinates (angle DIR
-%   and magnitude R).  The arrays u and v must be the same size (or
-%   either can be scalar). DIR is returned in degrees using the
-%   'oceanographic' convention for direction, which is the direction the
-%   vector is pointing TO on a compass (0 = North, 90 = East, 180 = South,
-%   270 = West).
-%
-
-
-
 %% Set defaults 
 % assuming input in in oceanograpic convention and units are degrees
 if nargin < 4; units = 'deg'; end

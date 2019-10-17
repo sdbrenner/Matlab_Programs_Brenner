@@ -72,8 +72,10 @@ err = abs( omega.^2 - g*kn.*tanh(kn.*depth) ); % error for initial guess
 
 %% Use Newton's method: k_(n+1) = k_n + f(k_n)/f'(k_n)
 converged = 0; % flag to identify if the iteration has converged with tolerance
-idx = find(err > tol); % on each loop, re-compute only the k's that don't meet the tolerance
 for n = 1:num_iter
+    
+    idx = find(err > tol); % on each loop, re-compute only the k's that don't meet the tolerance
+    
     fkn = g*kn(idx).*tanh(kn(idx).*depth(idx)) - omega(idx).^2;
     dfkn = g*tanh(kn(idx).*depth(idx)) + g*depth(idx).*kn(idx).*sech(kn(idx).*depth(idx)).^2;
     kn(idx) = kn(idx) - fkn./dfkn;

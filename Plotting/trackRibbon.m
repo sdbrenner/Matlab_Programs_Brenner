@@ -1,4 +1,4 @@
-function h = trackRibbon(x,y,z,C)
+function [h,coords] = trackRibbon(x,y,z,C)
 % TRACKRIBBON 
 %
 %   trackRibbon(x,y,z,C)
@@ -26,7 +26,14 @@ Z = repmat(z,[1,N]);
 
 %% Plot
 
+hold on;
 h = surf(X,Y,-Z,C);
 shading interp;
+
+%% Save coordinates in data structure:
+
+coords.X = X;
+coords.Y = Y;
+coords.Z = -Z;
 
 end

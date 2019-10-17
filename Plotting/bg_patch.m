@@ -56,7 +56,9 @@ function bg_patch(patch_start,patch_end,colour,varargin)
     
     %% Create patches
     
+    % get current axes limits
     YL = get(gca,'ylim');
+    XL = get(gca,'xlim');
     hold on;
     % loop through number of patches
     for n = 1:num_patch
@@ -73,5 +75,7 @@ function bg_patch(patch_start,patch_end,colour,varargin)
 %     set(gca,'children',flipud(get(gca,'children')),... %reverse the order of objects
     set(gca,'children',new_chld,...   
             'layer','top',...
-            'ylim',YL);
+            'ylim',YL,...
+            'xlim',XL);
+        
 end
