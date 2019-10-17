@@ -5,6 +5,12 @@ function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Data,waterdepth,
 % Assumes data conversion has been done in MIDAS, and velocities have
 % already been converted to East-North-Up.
 %
+% Variable names modified to account for data-preprocessing steps that I've 
+% performed on the raw data; specifically, I've separated data types so 
+% instead of 'Burst.MatlabTimeStamp' (and similar variables), the 
+% variable is now: 'Burst.MatlabTimeStamp'.  To return to default names,
+% simply find-and-replace 'Burst.' with 'Burst.'.
+%
 % Works on a single burst at a time.  Application to longer data sets
 % could be performed in a loop.
 %
@@ -17,7 +23,7 @@ function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Data,waterdepth,
 
 %% Define function constants:
 astQualityCutoff = 4500; %120;
-leQualityCutoff = 5000;
+leQualityCutoff = 5500;
 despike = false;                % apply phase-space despiking to raw data
 extrapEquilibriumRange = false; % extrapolate the pressure spectra when beyond noise floor
 declination = 15.6;             % deg (positive east)
@@ -26,20 +32,20 @@ maxWavePeriod = 16;             % max wave period allowed during final screening
 
 %% Extract simple values from Data structure
 
-time = Data.Burst_MatlabTimeStamp(1);
-pres = Data.Burst_Pressure;
-ast = Data.Burst_AltimeterAST;
-le = Data.Burst_AltimeterLE;
-astQual = Data.Burst_AltimeterQualityAST;
-leQual = Data.Burst_AltimeterQualityLE;
-% heading = Data.Burst_Heading;
-% pitch = Data.Burst_Pitch;
-% roll = Data.Burst_Roll;
+time = Burst.MatlabTimeStamp(1);
+pres = Burst.Pressure;
+ast = Burst.AltimeterAST;
+le = Burst.AltimeterLE;
+astQual = Burst.AltimeterQualityAST;
+leQual = Burst.AltimeterQualityLE;
+% heading = Burst.Heading;
+% pitch = Burst.Pitch;
+% roll = Burst.Roll;
 
 depth = mean(pres);
 
 % Calculate sampling frequency
-ts = mean(diff(Data.Burst_MatlabTimeStamp)) * 86400; % sampling period  [sec]
+ts = mean(diff(Burst.MatlabTimeStamp)) * 86400; % sampling period  [sec]
 fs = 1/ts;                     % sample frequency [Hz]
 
 
@@ -60,7 +66,7 @@ fs = 1/ts;                     % sample frequency [Hz]
 % Find appropriate depth bin:
  
 % % slight dynamic adjustment:
-% ranges = Data.Burst_Range;
+% ranges = Burst.Range;
 % rDepths = pres - ranges;
 % targetDepth = 0.1*pres;
 % [~,minInd] = min( abs(rDepths-targetDepth), [], 2 );
@@ -72,23 +78,23 @@ fs = 1/ts;                     % sample frequency [Hz]
 % w = NaN(1,length(minInd));
 % for n = 1:length(minInd)
 %     ind = minInd(n);
-%     u(n) = Data.Burst_VelEast(n,ind);
-%     v(n) = Data.Burst_VelNorth(n,ind);
-%     w(n) = Data.Burst_VelUp(n,ind);
+%     u(n) = Burst.VelEast(n,ind);
+%     v(n) = Burst.VelNorth(n,ind);
+%     w(n) = Burst.VelUp(n,ind);
 % end
 
 % Fixed depth (more appropriate for single burst)
-ranges = Data.Burst_Range;
+ranges = Burst.Range;
 rDepths = depth - ranges;
 targetDepth = 0.1*depth;
 [~,minInd] = min( abs(rDepths-targetDepth) );
 
-u = Data.Burst_VelEast(:,minInd);
-v = Data.Burst_VelNorth(:,minInd);
+u = Burst.VelEast(:,minInd);
+v = Burst.VelNorth(:,minInd);
 try 
-    w = Data.Burst_VelUp(:,minInd);
+    w = Burst.VelUp(:,minInd);
 catch
-    w = Data.Burst_VelUp1(:,minInd);
+    w = Burst.VelUp1(:,minInd);
 end
 
 %% Quality control the altimeter data:
