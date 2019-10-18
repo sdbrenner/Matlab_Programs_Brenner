@@ -1,4 +1,4 @@
-function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Data,waterdepth,lon,lat)
+function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Burst,waterdepth,lon,lat)
 %   [sigWaves]=sigWaves(Data,waterdepth,lat,lon)
 %
 % Create wave estimates from signature-500 burst data.
@@ -22,18 +22,18 @@ function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Data,waterdepth,
 % S.Brenner, 2019
 
 %% Define function constants:
-astQualityCutoff = 4500; %120;
+astQualityCutoff = 4500;
 leQualityCutoff = 5500;
 despike = false;                % apply phase-space despiking to raw data
 extrapEquilibriumRange = false; % extrapolate the pressure spectra when beyond noise floor
-declination = 15.6;             % deg (positive east)
+declination = 0;             % deg (positive east)
 finalScreening = true;          % optional final screening of results
 maxWavePeriod = 16;             % max wave period allowed during final screening
 
 %% Extract simple values from Data structure
 
 time = Burst.MatlabTimeStamp(1);
-pres = Burst.Pressure;
+pres = Burst.AltimeterPressure;
 ast = Burst.AltimeterAST;
 le = Burst.AltimeterLE;
 astQual = Burst.AltimeterQualityAST;
@@ -47,6 +47,39 @@ depth = mean(pres);
 % Calculate sampling frequency
 ts = mean(diff(Burst.MatlabTimeStamp)) * 86400; % sampling period  [sec]
 fs = 1/ts;                     % sample frequency [Hz]
+
+%% Quality control the altimeter data:
+%  Check that there are enough good data left for a reasonable wave
+%  estimate.  If so, replace low quality values with record mean
+numCutoff = 1600;
+
+% Acoustic surface tracking
+astBadBool = astQual < astQualityCutoff;
+ast( astBadBool ) = mean( ast(~astBadBool) );
+
+% Leading edge
+leBadBool = leQual < leQualityCutoff;
+le( leBadBool ) = mean( le(~leBadBool) );
+
+% If length is too short, discard
+if length(ast(~astBadBool)) < numCutoff &&...
+   length(le(~leBadBool)) < numCutoff 
+    
+    sigWaves.time = [NaN];
+    sigWaves.lat = [NaN];
+    sigWaves.lon = [NaN];
+    sigWaves.sigwaveheight = [NaN];
+    sigWaves.peakwaveperiod = [NaN];
+    sigWaves.peakwavedirT = [NaN];
+    sigWaves.wavespectra.energy = [NaN];
+    sigWaves.wavespectra.freq = [NaN];
+    sigWaves.wavespectra.a1 = [NaN];
+    sigWaves.wavespectra.b1 = [NaN];
+    sigWaves.wavespectra.a2 = [NaN];
+    sigWaves.wavespectra.b2 = [NaN];
+    sigWaves.wavespectra.check = [NaN];
+    return;
+end
 
 
 %% Extract velocity from Data structure
@@ -97,16 +130,7 @@ catch
     w = Burst.VelUp1(:,minInd);
 end
 
-%% Quality control the altimeter data:
-%  replace low quality values with record mean
 
-% Acoustic surface tracking
-badBool = astQual < astQualityCutoff;
-ast( badBool ) = mean( ast(~badBool) );
-
-% Leading edge
-badBool = leQual < leQualityCutoff;
-le( badBool ) = mean( le(~badBool) );
 
 %% Despike
 
