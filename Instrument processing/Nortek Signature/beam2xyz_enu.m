@@ -1,5 +1,6 @@
-function [ Data, Config, T_beam2xyz ] = beam2xyz_enu( Data, Config, mode, twoZs, declination )
+function [ Data, Config, T_beam2xyz ] = beam2xyz_enu( Data, Config, mode, twoZs, declination, removeOldData )
 
+if nargin < 6; removeOldData = 1; end
 if nargin < 5; declination = 0; end
 if nargin < 4; twoZs = 0; end
 
@@ -217,5 +218,25 @@ else
 	Data.( [ dataModeWord '_VelUp' ] ) = UAllCells;
 end
 
+
+%% Remove Beam and XYZ data
+
+if removeOldData
+    Data = rmfield(Data,...
+        {[ dataModeWord '_VelBeam1' ],...
+         [ dataModeWord '_VelBeam2' ],...
+         [ dataModeWord '_VelBeam3' ],...
+         [ dataModeWord '_VelBeam4' ],...
+         [ dataModeWord '_VelX' ],...
+         [ dataModeWord '_VelY' ] });
+    if twoZs
+        Data = rmfield(Data,...
+            {[ dataModeWord '_VelZ1' ],...
+             [ dataModeWord '_VelZ2' ]} );
+    else
+        Data = rmfield(Data,[ dataModeWord '_VelZ' ] );
+    end
+    
+end
 
 
