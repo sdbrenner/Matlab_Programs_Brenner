@@ -8,19 +8,14 @@ function colour = cinterp(data, clim, cmap)
 %	interpolate cmap to find the colours that correspond to data values
 %	within clim
 %
-%   Usage example: 
-%   colour lines in a plot based on an additional variable, cData
+%   Usage example:
 %       cmap = jet(20);
-%   	clim = [0,10];
-%       cData = [1,2,3,7];
-%       cols =  cinterp( cData, clim, cmap );
-%       figure;
-%       hold on;
-%       set(gca,'ColorOrder',cols);
-%       plot( magic(4) );
+%       clim = [0,10];
+%       cData = [3,4,7,8];       
+%       cols =  cinterp( cData, clim, cmap )  
+%       X = magic(4);
+%       plot( X(1,:), 'color', cols(1,:) );
 %       caxis(clim);
-%       colormap(cmap);
-%       colorbar;
 %
 %	S.D.Brenner, 2018
 
