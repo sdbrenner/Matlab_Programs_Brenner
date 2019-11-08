@@ -1,33 +1,36 @@
 function bg_patch(patch_start,patch_end,colour,varargin)
-    % BG_PATCH creates patches in the background of a figure
-    % (e.g. highlighting periods of interest)
-    %
-    % 'patch_start' and 'patch_end' can be scalar or vectors.  If they
-    % are vectors, bg_patch will create multiple patches with start and end
-    % locations based on matched pairs of 'patch_starts' and 'patch_ends'.
-    %
-    % bg_patch(patch_start,patch_end); creates light grey background 
-    %   patches that start at 'patch_start' and end at 'patch_end'.
-    %   
-    % bg_patch(...,colour); allows for the specification of the patch
-    %   colour.  The 'colour' variable should be a 1x3 vector.
-    % bg_patch(...,'Name','Value'); allows for the input of
-    %   additional optional properties to the patch command.  These must
-    %   take the form of name,value pairs as they would be passed directly
-    %   to the patch command. 
-    %   For example, the function can be called as:
-    %       bg_patch(patch_start,patch_end,colour,'EdgeColor','r');
-    %   For details of the choices for Name-Value pair arguments, see
-    %   documentation for the patch command.
-    %   To specify these parameters without specifying a patch colour,
-    %   input an empty value for the colour variable:
-    %       bg_patch(patch_start,patch_end,[],'Name','Value');
-    %
-    % Note: bg_patch will set the vertical extent of the patches to the
-    %   current y-limits of the axis.  If the y-limits change, bg_patch
-    %   objects will not be updated.  Therefore, it is recommended to call
-    %   this function after the y-limits of the plot have already been set.
-    
+% BG_PATCH creates patches in the background of a figure
+% (e.g. highlighting periods of interest)
+%
+%   bg_patch(patch_start,patch_end) shades in the area between patch_start
+%   and patch_end, where both of the inputs can either be scalar or vectors
+%   quantities.  If they are vectors, bg_patch will create multiple patches
+%   with start and end locations based on matched pairs of 'patch_starts'
+%   and 'patch_ends'.
+%
+%   bg_patch(patch_start,patch_end); creates light grey background patches
+%   that start at 'patch_start' and end at 'patch_end'.
+%   
+%   bg_patch(...,colour); allows for the specification of the patch colour.
+%   The 'colour' variable should be a 1x3 vector.
+%
+%   bg_patch(...,'Name','Value'); allows for the input of additional
+%   optional properties to the patch command.  These must take the form of
+%   name,value pairs as they would be passed directly to the patch command.
+%   For example, the function can be called as:
+%       bg_patch(patch_start,patch_end,colour,'EdgeColor','r');
+%   For details of the choices for Name-Value pair arguments, see
+%   documentation for the patch command. To specify these parameters
+%   without specifying a patch colour, input an empty value for the colour
+%   variable:
+%       bg_patch(patch_start,patch_end,[],'Name','Value');
+%
+%   Note: bg_patch will set the vertical extent of the patches to the
+%   current y-limits of the axis.  If the y-limits change, bg_patch objects
+%   will not be updated.  Therefore, it is recommended to call this
+%   function after the y-limits of the plot have already been set.
+%
+%   S.D.Brenner, 2018
     
     %% Initialization (Error checking and setting defaults)
     
