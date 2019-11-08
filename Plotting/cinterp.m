@@ -8,6 +8,8 @@ function colour = cinterp(data, clim, cmap)
 %
 % cinterp will linearly interpolate cmap to find the colours that
 % correspond to data values within clim
+%
+% S.D.Brenner, 2018
 
 
 % Number of distinct colours in map:
