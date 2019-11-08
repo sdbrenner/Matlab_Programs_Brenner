@@ -1,37 +1,37 @@
 function [scHand,ctRangeSpecFlag] = TS_plot(CT,SA,ColVar,CT_range,SA_range,Col_range)
+% TS_PLOT creates a temperature-salitiny scatter plot
 %
-% TS_plot(CT,SA) creates a scatter plot in temperature-salitiny space with
-% background contours of sigma (potential density anomaly)
-% CT is conservative temperature and SA is absolute salinity (as per
-% TEOS10)
-% CT and SA must be arrays of the same size (matrices are permitted).  
+%   TS_plot(CT,SA) creates a scatter plot in temperature-salitiny space
+%   with background contours of sigma (potential density anomaly). CT is
+%   conservative temperature and SA is absolute salinity (as per TEOS10). CT
+%   and SA must be arrays of the same size (matrices are permitted).
 %
-% TS_plot(CT,SA,ColVar) uses a third variable (e.g. pressure) to colour the
-% the points.  
-% ColVar must be of the same size as CT and SA.
+%   TS_plot(CT,SA,ColVar) uses a third variable (e.g. pressure) to colour
+%   the the points. ColVar must be of the same size as CT and SA, or a
+%   vector with one side length matching CT and SA (e.g, CT,SA may be
+%   matrices in time and depth, and ColVar could be a time vector).
 %
-% Plot extents can be optionally defined using 
-% TS_plot(CT,SA,ColVar,CT_range,SA_range,Col_range)
+%   TS_plot(CT,SA,ColVar,CT_range,SA_range,Col_range) optionally defines
+%   the plot extents in each of the three variables.
 %
-% Use empty inputs to use default values. 
-% For example, create a T-S plot with a specified SA_range, but no 
-% colour-defining variable and default CT_range:
-% TS_plot(CT,SA,[],[],SA_range);
+%   Use empty inputs to use default values. For example, create a T-S plot
+%   with a specified SA_range, but no colour-defining variable and default
+%   CT_range: TS_plot(CT,SA,[],[],SA_range);
 %
-% scHand = TS_plot(...) returns the plot handle for the scatterplot
+%   scHand = TS_plot(...) returns the plot handle for the scatterplot.
 %
-% This functions requires the TEOS10 toolbox to calculate sigma contours.
-% It is available for free at: http://www.teos-10.org/software.htm
+%   This functions requires the TEOS10 toolbox to calculate sigma contours.
+%   It is available for free at: http://www.teos-10.org/software.htm
 %
-% Samuel Brenner, 2018
+%   S.D.Brenner, 2018
 %
-% Updated:
-%   Sept., 2019: Added output argument to get scatter plot handle
-%   Oct., 2019: Added ability for ColVar to be a vector with one dimension
-%       matching CT,SA
-%   Oct., 2019: Added freezing temperature line
-%   Oct., 2019: Fixed default CT_range lower bound to account for negative
-%       temperature values (maybe?)
+%   Updated:
+%       Sept., 2019: Added output argument to get scatter plot handle
+%       Oct., 2019: Added ability for ColVar to be a vector with one dimension
+%           matching CT,SA
+%       Oct., 2019: Added freezing temperature line
+%       Oct., 2019: Fixed default CT_range lower bound to account for negative
+%          temperature values (maybe?)
 
 %% Check number of inputs and fill unused inputs with default values
 
