@@ -43,7 +43,7 @@ end
 
 
 % if data_range is not specified, define it
-if nargin < 4; data_range = [min(A), max(A)]; end
+if nargin < 4 || isempty(data_range); data_range = [min(A), max(A)]; end
 
 % Check that data_range is a two-element vector
 if length(data_range) ~= 2
@@ -53,9 +53,7 @@ data_range = sort(data_range);
 
 
 % if func isn't specified, define it
-if nargin < 5
-    func = @nanmean;
-end
+if nargin < 5; func = @nanmean; end
 
 %% Define Bins
 
