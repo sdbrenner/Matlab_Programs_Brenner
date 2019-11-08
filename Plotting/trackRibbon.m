@@ -1,10 +1,13 @@
 function [h,coords] = trackRibbon(x,y,z,C)
-% TRACKRIBBON 
+% TRACKRIBBON plots along a three-dimension "ribbon"
 %
-%   trackRibbon(x,y,z,C)
-%   x and y are both 1xN, z is Mx1, and C is MxN.
+%   trackRibbon(x,y,z,C) plots values from the matrix C as colour along a
+%   three-dimensional ribbon defined by x, y, and z, where x and y are both
+%   1xN, z is Mx1, and C is MxN.
 %
 %   h = trackRibbon(...) returns the function handle
+%   [h,coords] = trackRibbon(...) also returns a data structure, coords,
+%   containing the gridded X,Y,Z coordinates along the track ribbon.
 
 %% Error checking
 % Obviously this still needs to be added.  Mostly this should check input
@@ -16,7 +19,7 @@ x = x(:)';
 y = y(:)';
 z = z(:);
 
-%% Create variable matrices
+%% Create gridded variable matrices
 
 [M,N] = size(C);
 
@@ -27,13 +30,13 @@ Z = repmat(z,[1,N]);
 %% Plot
 
 hold on;
-h = surf(X,Y,-Z,C);
+h = surf(X,Y,Z,C);
 shading interp;
 
 %% Save coordinates in data structure:
 
 coords.X = X;
 coords.Y = Y;
-coords.Z = -Z;
+coords.Z = Z;
 
 end
