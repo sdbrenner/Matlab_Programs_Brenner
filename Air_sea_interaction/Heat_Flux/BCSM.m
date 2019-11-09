@@ -1,28 +1,25 @@
 function [Rs,alf_sky] = BCSM(R_et,Z,P)
-%% Bird Clear Sky Model
-% Surface transmitted downwelling solar radiation, nominally based on the
-% procedure of Bird (1994), but equations are copied from:
-% A General Lake Model (GLM 2.4) for linking with high-frequency sensor 
-% data from the Global Lake Ecological Observatory Network (GLEON). 
-% Hipsey et. al., 2017
-% doi: 10.5194/gmd-2017-257
+%% BCSM Bird Clear Sky Model
 %
-% inputs:
-% R_et: top-of-atmosphere solar radiation
-% Z:    solar zenith angle [degrees]
-% P:    barometric pressure [mb]
+%   [Rs,alf_sky] = BCSM(R_et,Z,P) calculates the transmitted downwelling
+%   solar radiation, Rs, and atmospheric albedo, alf_sky, for given
+%   top-of-atmosphere solar radiation, R_et, solar zenith angle, Z
+%   [degrees], and barometric pressure, P [mb]
+%   The units of Rs will be the same as the units of R_et.
 %
-% output:
-% Rs:   transmitted downwelling solar radiation 
-% (Rs is given in the same units a R_et)
-% alf_sky: atmospheric albedo
+%   Surface transmitted downwelling solar radiation, nominally based on the
+%   procedure of Bird (1994), but equations are copied from:  
+%       A General Lake Model (GLM 2.4) for linking with high-frequency
+%       sensor data from the Global Lake Ecological Observatory Network
+%       (GLEON).
+%       Hipsey et. al., 2017 
+%       doi: 10.5194/gmd-2017-257
 %
-% ** Note: 
-% The Bird (1994) model uses a spectral parameterization while Hipsey et.
-% al. (2017) convert that into a bulk form.  In some cases it is difficult
-% to see whether the two versions match. Further, there are some cases 
-% where model parameters used in GLM were unclear, so some assumptions have
-% been made have been made about these values.
+%   ** Note: The Bird (1994) model uses a spectral parameterization while
+%   Hipsey et. al. (2017) convert that into a bulk form.  In some cases it
+%   is difficult to see whether the two versions match. Further, there are
+%   some cases where model parameters used in GLM were unclear, so some
+%   assumptions have been made have been made about these values.
 
 
 
