@@ -9,10 +9,10 @@ function Zs = convSmooth(Z,N,sigma)
 %
 %   For more information (and possibly corrections),see:    
 %       https://www.mathworks.com/help/matlab/data_analysis/convolution-filter-to-smooth-data.html
-%       https://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm
+https://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm
 %   This may also be a poor-man's version of imgaussfilt ?
 %
-%   S.D.Brenner, 2019
+%   S.D.Brenner
 
 %% Parse inputs
 
