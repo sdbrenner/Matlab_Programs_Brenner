@@ -5,10 +5,17 @@ function idx = findbetween(x,xRange)
 %   the range of xRange (inclusive of endpoints)
 %
 %   S.D.Brenner, 2019
-     
+    
+    
 %% Error checking
 
-if length(xRange) ~=2 || ~issorted(xRange) || ~isnumeric(xRange) || any(isnan(xRange))
+if length(xRange) ~=2 || ~issorted(xRange) || ~isnum
+
+
+if length(xRange) ~=2
+    error('xRange must be length 2');
+end
+if ~issorted(xRange)
     error('Value xRange must be a 1x2 vector of numeric type in which the second element is larger than the first and may be Inf');
 end
 if ~isvector(x)
