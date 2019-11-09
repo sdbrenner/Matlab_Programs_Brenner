@@ -1,11 +1,13 @@
 function [Q,cos_ths] = insolation(lat,lon,mattimeUTC)
+% INSOLATION Top of atmosphere solar radiation input (insolation)
+%
+%   [Q,cos_ths] = insolation(lat,lon,mattimeUTC)
+%
 % Top of atmosphere solar radiation input (insolation),
 % calculated from Global Physical Climatology (Hartmann, 1994)
 % https://www.elsevier.com/books/global-physical-climatology/hartmann/978-0-12-328531-7
 %
-% [Q,cos_ths] = insolation(lat,lon,mattimeUTC)
-%
-% Samuel Brenner, 2018
+% S.D.Brenner, 2018
 
 % convert from UTC time to local time:
 timezone = lon/360;
