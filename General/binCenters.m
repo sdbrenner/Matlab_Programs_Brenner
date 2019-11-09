@@ -1,20 +1,35 @@
-function xCents = binCenters(xEdges)
-% BINCENTERS returns a vector of bin centers given a vector of bin edges
-% (e.g. from 'histogram')
+function binCents = binCenters(binEdges)
+% BINCENTERS finds bin centers
 %
-%   xCents = binCenters(xEdges)
-%   xEdges must be an Nx1 vector, then xCents will be an (N-1)x1 vector
+%   binCents = binCenters(binEdges) returns a vector of bin centers given a
+%   vector of bin edges (e.g. from 'histogram'). binEdges must be a vector.
+%   If binEdges is size 1xN or Nx1, then binCents is size 1x(N-1) or
+%   (N-1)x1 respectively.
 %
 %   S.D.Brenner, 2019
 
 %% Input parsing/error checking
-% every good function should have this, but this is a lazy function so this
-% will need to be added in after
 
-xEdges = xEdges(:).';
+% Check type
+if ~isvector(binEdges)
+    error('Input must be a vector');
+end
+
+% Ensure xEdges is a row vector
+xEdgesRow = binEdges(:).';
+
+    
 
 %% Function execution
-% really simple
-xCents = mean( [xEdges(1:end-1) ; xEdges(2:end) ]);
+% ( this is really simple )
+
+% Find bin centers
+binCents = mean( [xEdgesRow(1:end-1) ; xEdgesRow(2:end) ]);
+
+% Rotate to the correct orientation
+if iscolumn(binEdges)
+    binCents = binCents(:);
+end
+
 
 end
