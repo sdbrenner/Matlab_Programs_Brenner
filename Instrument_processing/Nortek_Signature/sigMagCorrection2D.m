@@ -1,14 +1,41 @@
 function [Data,magOffset] = sigMagCorrection2D( Data, mode, magOffset, makePlots )
-% SIGMAGCORRECTION2D Magenetic compass correction for Nortek Signature-series
-% acoustic doppler current profilers
-%    Data = sigMagCorrection2D( Data ) calculates and applies a "hard-iron"
-%    magnetic correction to signature heading data.
+% SIGMAGCORRECTION2D "Hard-iron" magenetic compass correction for Nortek
+% Signature-series acoustic doppler current profilers
 %
-%    [ Data , magOffset ] = sigMagCorrection2D( Data, mode)
-%    [ Data , magOffset ] = sigMagCorrection2D( Data, mode, magOffset)
-%    [ Data , magOffset ] = sigMagCorrection2D( Data, mode, magOffset, makePlots )
-
-% Hard-iron correction to signature heading data
+%   Data = sigMagCorrection2D( Data ) calculates and applies a "hard-iron"
+%   magnetic correction to Signature-series heading data for Average mode.
+%   This correction completely replaces the Data.Average_Heading variable
+%   instead of just modifying it, so other corrections applied (e.g.
+%   declination offset) are wiped out.
+%
+%   [ Data , magOffset ] = sigMagCorrection2D( Data ) outputs a 1x2 vector
+%   magOffset containing the x and y magnetic offset values calculated.
+%
+%	[ ... ] = sigMagCorrection2D( Data, mode) allows for specification of
+%	the input data mode as 'avg', 'burst', or 'ice' (corresponding to
+%	Average, Burst, or AverageIce structure variables).  The function can
+%	act on multiple data types by including different modes by including a
+%	cell array of modes: e.g. {'avg','ice'}
+%
+%   [ ... ] = sigMagCorrection2D( Data, mode, magOffset) applies the x and
+%   y magnetic offset values from the vector 'magOffset' instead of
+%   calculting them.
+%
+%   [ ... ] = sigMagCorrection2D( ..., makePlots ) defines whether or not
+%   the function should make plots showing the magnetic circle and
+%   corrected v.s. uncorrected heading.  The variable 'makePlots' is
+%   specified as a booleen true (1) or false (0). By default the function
+%   will make plots (makePlots=1) if it is calculating the magnetic offset
+%   values, but will not make plots (makePlots=0) if an offset value is
+%   specified.
+%
+%   Notes:  
+%   (1) This function is developed to operate on Data structures that are
+%   output by converting raw .ad2cp data to .mat files using MIDAS
+%   software.  Data converted with Signature Deployment software may not
+%   have matching variable names.
+%
+%   S.D.Brenner, 2019
 
 %% 
 

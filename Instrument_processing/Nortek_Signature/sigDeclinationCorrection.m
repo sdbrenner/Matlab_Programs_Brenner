@@ -1,16 +1,36 @@
 function Data = sigDeclinationCorrection(Data,mode,declinationOffset,declinationMattime)
-% SIGDECLINATIONCORRECTION Declination offset heading correction for Nortek Signature-series
-% acoustic doppler current profilers
+% SIGDECLINATIONCORRECTION Declination offset heading correction for Nortek
+% Signature-series acoustic doppler current profilers
 %
-%   Data = sigDeclinationCorrection(Data,declinationOffset)
-%   Data = sigDeclinationCorrection(Data,declinationOffset,declinationMattime)
+%   Data = sigDeclinationCorrection(Data,mode,declinationOffset) applies a
+%   constant declination offset, given by the scalar value
+%   declinationOffset, to heading data for the data mode specified by
+%   'mode' (which must be one of 'avg','burst', or 'ice').  The function
+%   can act on multiple data types by including different modes by
+%   including a cell array of modes: e.g. {'avg','ice'}. The corrected
+%   heading is given by:
+%       heading + offset
+%
+%   Data = sigDeclinationCorrection(...,declinationOffset,declinationMattime)
+%   allows for specification of time-varying declination offset.  The
+%   varibles declinationOffset and declinationMattime must both be vectors
+%   of matching size, where declinationMattime specifies times in Matlab
+%   time format corresponding to each offset values in declinationOffset.
+%   Offset values for each time in the variables of the Data structure will
+%   be found through linear interpolation of the inputs.
+%
+%   Notes:  
+%   (1) This function is developed to operate on Data structures that are
+%   output by converting raw .ad2cp data to .mat files using MIDAS
+%   software.  Data converted with Signature Deployment software may not
+%   have matching variable names.
+%
+%   S.D.Brenner, 2019
 
 
 %% Parse inputs
 
 if isempty(mode); mode = 'avg'; end
-
-
 
 % Parse mode choice
 %   ( Note, 'mode' options could have instead been the 'dataWordChoices'
@@ -37,8 +57,9 @@ end
 %% 
 
 if length(declinationOffset) > 1
-    if nargin < 4 || isempty(declinationMattime)
-        error('If ''declinationOffset'' is input as a vector, the corresponding variable ''declinationMattime'' must also be supplied');
+    if nargin < 4 || isempty(declinationMattime) || ...
+       ~isequal(size(declinationMattime),size(declinationOffset))
+        error('If ''declinationOffset'' is input as a vector, the corresponding variable ''declinationMattime'' with matching size must also be supplied');
     end
     declinationOffset = interp1(declinationMattime,declinationOffset,...
                                 Data.([dataModeWord,'_MatlabTimeStamp']) );

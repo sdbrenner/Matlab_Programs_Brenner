@@ -1,12 +1,31 @@
 function Data = sigBeamMapping(Data,Config,mode,output)
-% SIGBEAMMAP Maps beam coordinates to xyz, enu for Nortek Signature500
+% SIGBEAMMAP Maps beam coordinates to xyz, enu for Nortek Signature-series
 % ADCPs (including those with AHRS systems)
-%   Data = sigBeamMap(Data,Config) 
 %
-%   Data = sigBeamMap(Data,Config,mode) 
-%   Data = sigBeamMap(Data,Config,mode,output) 
+%   Data = sigBeamMap(Data,Config) maps beam velocities to cartesian
+%   velocities in local (xyz) or Earth (enu) coordinates for the Average
+%   mode data in the structure 'Data'.
 %
-%   Note: Nortek can provide a Matlab script that performs the same
+%   Data = sigBeamMap(Data,Config,mode) allows specification of the input
+%   data mode as 'avg', 'burst', or 'ice' (corresponding to Average, Burst,
+%   or AverageIce structure variables).  The function can act on multiple
+%   data types by including different modes by including a cell array of
+%   modes: e.g. {'avg','ice'}
+%
+%   Data = sigBeamMap(Data,Config,mode,output) allow specification of of
+%   the variables retained in the output Data structure; choices are
+%   'beam','xyz', or 'enu'.  If 'enu' is specificied, only the
+%   East-North-Up velocity variables will be retained in the final
+%   structure (beam velocities will be removed).  The function can output
+%   multiple data types by including different outputs in a cell array:
+%   e.g. {'beam','enu'}, or {'xyz','enu'}
+%
+%   Notes:  
+%   (1) This function is developed to operate on Data structures that are
+%   output by converting raw .ad2cp data to .mat files using MIDAS
+%   software.  Data converted with Signature Deployment software may not
+%   have matching variable names.
+%   (2) Nortek can provide a Matlab script that performs the same
 %   functionality, and is more general.  This script is a adapted from
 %   theirs, and slightly simplified/adjusted to suit personal processing
 %   needs and practices and provide speed improvements.

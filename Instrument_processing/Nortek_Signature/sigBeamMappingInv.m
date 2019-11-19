@@ -3,7 +3,26 @@ function Data = sigBeamMappingInv(Data,Config,mode)
 % coordinates for Nortek Signature500 ADCPs (including those with AHRS
 % systems)
 %
-%   Data = sigBeamMappingInv(Data,Config,mode)
+%   Data = sigBeamMappingInv(Data,Config) maps cartesian East-North-Up
+%   (enu) coordinates back to beam velocity for the Average mode data in
+%   the structure 'Data'.
+%
+%   Data = sigBeamMappingInv(Data,Config,mode) allows specification of the
+%   input data mode as 'avg', 'burst', or 'ice' (corresponding to Average,
+%   Burst, or AverageIce structure variables).  The function can act on
+%   multiple data types by including different modes by including a cell
+%   array of modes: e.g. {'avg','ice'}
+%
+%   Notes: 
+%   (1) This function is developed to operate on Data structures that are
+%   output by converting raw .ad2cp data to .mat files using MIDAS
+%   software.  Data converted with Signature Deployment software may not
+%   have matching variable names.
+%   (2) I had earlier issues in ensuring that the function could perform
+%   generally for both the 1D (time varying) velocity fields produced in
+%   'ice' mode, and 2D (depth-and-time varying) velocity fields produced by
+%   standard ADCP profiling ('avg' and 'burst' modes).  I think that
+%   currently 1D vectors are unintentionally rotated by this code.
 %
 %   S.D.Brenner, 2019
 

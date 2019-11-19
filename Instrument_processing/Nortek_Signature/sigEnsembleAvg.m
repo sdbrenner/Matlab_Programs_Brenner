@@ -1,17 +1,55 @@
 function Data = sigEnsembleAvg(Data,mode,flds,func)
-% SIGENSEMBLEAVG averages ensembles
+% SIGENSEMBLEAVG averages data ensembles
 %
-%   avgData = sigEnsembleAvg(Data,mode)
+%   Data = sigEnsembleAvg(Data) peforms ensemble averaging for the Average
+%   mode data in the structure 'Data'.
 %
-%   avgData = sigEnsembleAvg(Data,mode,fields)
-%   avgData = sigEnsembleAvg(Data,mode,fields,func)
+%   Data = sigEnsembleAvg(Data,mode) allows specification of the input data
+%   mode as 'avg', 'burst', or 'ice' (corresponding to Average, Burst, or
+%   AverageIce structure variables).  The function can act on multiple data
+%   types by including different modes by including a cell array of modes:
+%   e.g. {'avg','ice'}
+%
+%   Data = sigEnsembleAvg(Data,mode,fields) will only perform ensemble
+%   averaging for only the fields specified, where 'fields' is a cell array
+%   containing field names. If fields is not input, or is input as an empty
+%   value, then averaging will be performed on all fields by default.
+%
+%   Data = sigEnsembleAvg(...,func) allows for specification of the
+%   averaging function.  By default, 'func' is @nanmedian: so ensemble
+%   averages are the medions of each ensemble, ignorining NaN values
+%   (nanmedian requires the Statistics toolbox).  'func' must be a function
+%   definition appropriate for application to vector data, or across rows
+%   of matrix data.  While the argument 'func' allows for specification of
+%   alternative averageing functions (e.g. @mean), it can be used to
+%   perform other operations on ensembles as well (such as @std).  For
+%   example, the number of non-NaN values in each ensemble can be found by
+%   calling sigEnsembleAvg as follows:
+%       nancount = @(x) sum( ~isnan(x) );
+%       avgDataCnt = sigEnsembleAvg(averageData,'avg',[],nancount);
+%
+%   Notes:  
+%   (1) This function is developed to operate on Data structures that are
+%   output by converting raw .ad2cp data to .mat files using MIDAS
+%   software.  Data converted with Signature Deployment software may not
+%   have matching variable names.
+%   (2) Ensemble identification is done using the variable
+%   Data.*_EnsembleCount. If there are no missing samples and no ensembles
+%   are cut off at the beginning or end, then the data is considered 'well
+%   behaved', and averaging is performed efficiently by reorangizing the
+%   data into matrices so all ensembles can be averaged simultaneously.  If
+%   data are not well behaved, then ensemble average in done in a loop,
+%   where ensembles are delineated by indices where the ensemble count
+%   stops increasing.  This is a much slower process.
+%
+%   S.D.Brenner, 2019
 
 %% Parse inputs
 
     % Set default values
-    if nargin < 4 || isempty(func); func = @nanmean; end
-    if nargin < 3 || isempty(flds); flds = fields(Data); end
-    if nargin < 2 || isempty(mode); mode = 'avg'; end
+    if nargin < 4 || isempty(func); func = @nanmean;        end
+    if nargin < 3 || isempty(flds); flds = fields(Data);    end
+    if nargin < 2 || isempty(mode); mode = 'avg';           end
     
     % Parse mode choice
     %   ( Note, 'mode' options could have instead been the 'dataWordChoices'
