@@ -9,6 +9,11 @@ function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Data,waterdepth,
 %   on a single burst at a time; application to longer data sets
 %	could be performed in a loop.
 %
+%   [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess( ... ) returns
+%   other wave estimates.  While 'sigWaves' is a blended product from all
+%   three data sources, 'astWaves', 'leWaves', and 'presWaves' are
+%   unblended.
+%
 %   Actual wave processing is done using the UVZwaves subroutine from the
 %   SWIFT codes (https://github.com/jthomson-apluw/SWIFT-codes). Program
 %   adapted from an AWAC code written by J. Thomson:
@@ -26,11 +31,12 @@ function  [sigWaves,astWaves,leWaves,presWaves]=sigWavesProcess(Data,waterdepth,
 
 %% Define function constants:
 
-astQualityCutoff = 4500;
+
+astQualityCutoff = 4500;        % [NOTE: I am still unsure about appropriate quality cutoffs for ast/le]
 leQualityCutoff = 5500;
 despike = false;                % apply phase-space despiking to raw data
 extrapEquilibriumRange = false; % extrapolate the pressure spectra when beyond noise floor
-declination = 0;             % deg (positive east)
+declination = 0;                % deg (positive east) [NOTE: this is legacy from the AWAC code, but is not used here]
 finalScreening = true;          % optional final screening of results
 maxWavePeriod = 16;             % max wave period allowed during final screening
 
@@ -38,13 +44,17 @@ maxWavePeriod = 16;             % max wave period allowed during final screening
 
 time = Data.Burst_MatlabTimeStamp(1);
 pres = Data.Burst_AltimeterPressure;
-ast = Data.Burst_AltimeterAST;
-le = Data.Burst_AltimeterLE;
 astQual = Data.Burst_AltimeterQualityAST;
 leQual = Data.Burst_AltimeterQualityLE;
-% heading = Data.Burst_Heading;
-% pitch = Data.Burst_Pitch;
-% roll = Data.Burst_Roll;
+
+% cheick if "corrected" altimeter data is available
+if isfield(Data,'Burst_AltimeterAST_corrected')
+    ast = Data.Burst_AltimeterAST_corrected;
+    le = Data.Burst_AltimeterLE_corrected;
+else
+    ast = Data.Burst_AltimeterAST;
+    le = Data.Burst_AltimeterLE;
+end
 
 depth = mean(pres);
 
@@ -55,7 +65,7 @@ fs = 1/ts;                     % sample frequency [Hz]
 %% Quality control the altimeter data:
 %  Check that there are enough good data left for a reasonable wave
 %  estimate.  If so, replace low quality values with record mean
-numCutoff = 1600;
+numCutoff = 1600; % [ NOTE: Arbitrarily chosen - probably should be higher ]
 
 % Acoustic surface tracking
 astBadBool = astQual < astQualityCutoff;
@@ -100,39 +110,17 @@ end
 %   just below the surface by a fraction of the measured depth; 10% of the
 %   depth has proven to provide a good signal response without contamination.
 
-% Find appropriate depth bin:
- 
-% % slight dynamic adjustment:
-% ranges = Data.Burst_Range;
-% rDepths = pres - ranges;
-% targetDepth = 0.1*pres;
-% [~,minInd] = min( abs(rDepths-targetDepth), [], 2 );
-% 
-% % Loop through and extract appropriate velocity data
-% % [I feel like this can been done better with vector indices...]
-% u = NaN(1,length(minInd));
-% v = NaN(1,length(minInd));
-% w = NaN(1,length(minInd));
-% for n = 1:length(minInd)
-%     ind = minInd(n);
-%     u(n) = Data.Burst_VelEast(n,ind);
-%     v(n) = Data.Burst_VelNorth(n,ind);
-%     w(n) = Data.Burst_VelUp(n,ind);
-% end
-
-% Fixed depth (more appropriate for single burst)
+% Find appropriate depth bin: 
 ranges = Data.Burst_Range;
 rDepths = depth - ranges;
 targetDepth = 0.1*depth;
 [~,minInd] = min( abs(rDepths-targetDepth) );
 
+% Extract values
 u = Data.Burst_VelEast(:,minInd);
 v = Data.Burst_VelNorth(:,minInd);
-try 
-    w = Data.Burst_VelUp(:,minInd);
-catch
-    w = Data.Burst_VelUp1(:,minInd);
-end
+w = Data.Burst_VelUp1(:,minInd);
+
 
 
 
@@ -142,7 +130,7 @@ end
 if despike
     % func_despike_phasespace3d uses 'cubic' for interp method and matlab will
     % throw warnings that 'pchip' should be used instead.  Supress those
-    % warnings:
+    % warnings
     wId = 'MATLAB:interp1:UsePCHIP';
     warning('off',wId);
 
@@ -157,11 +145,7 @@ if despike
 end
 
 %% Rotate velocities for declination
-% east = u;
-% north = v;
-% 
-% u = east.*cosd(declination) - north.*sind(declination);
-% v = east.*sind(declination) + north.*cosd(declination);
+% This is already performed in pre-processing
 
 %% Waves proceess with AST
 
@@ -222,14 +206,10 @@ presWaves.wavespectra.check = check';
 % correct pressure for Bernouli (velocity registering as additional pressure)
 E = E./4;
 
-% correct pressure spectra for depth attenutation
+% correct pressure spectra for depth attenutation:
 
 %   find wavenumber for each frequency
-% for j=1:length(f)
-%     k(j) = wavenumber( f(j), waterdepth );
-% end
 k = vect_wavenum( 2*pi*f, waterdepth);
-
 
 % transfer function
 attenuation = cosh( k .* waterdepth ) ./ cosh( k.*(waterdepth-depth) ) ;
