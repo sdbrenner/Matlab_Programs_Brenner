@@ -49,8 +49,8 @@ leQual = Data.Burst_AltimeterQualityLE;
 
 % cheick if "corrected" altimeter data is available
 if isfield(Data,'Burst_AltimeterAST_corrected')
-    ast = Data.Burst_AltimeterAST_corrected;
-    le = Data.Burst_AltimeterLE_corrected;
+    ast = Data.Burst_AltimeterAST_Corrected;
+    le = Data.Burst_AltimeterLE_Corrected;
 else
     ast = Data.Burst_AltimeterAST;
     le = Data.Burst_AltimeterLE;
@@ -209,7 +209,7 @@ E = E./4;
 % correct pressure spectra for depth attenutation:
 
 %   find wavenumber for each frequency
-k = vect_wavenum( 2*pi*f, waterdepth);
+k = vectWavenum( 2*pi*f, waterdepth);
 
 % transfer function
 attenuation = cosh( k .* waterdepth ) ./ cosh( k.*(waterdepth-depth) ) ;
