@@ -1,0 +1,35 @@
+{
+  "_schemaVersion": "1.0.0",
+  "binFun":
+  {
+     "inputs":
+     [
+        {"name":"x", "kind":"required", "type":["numeric"], "purpose":"dependant variable vector"},
+        {"name":"y", "kind":"ordered", "type":["numeric"], "purpose":"# independant variable vector"},
+        {"name":"binSize", "kind":"ordered", "type":["scalar"], "purpose":"bin size"},
+        {"name":"binFunction", "kind":"namevalue", "type":["function_handle"],"purpose":"Option"},
+        {"name":"fillValue", "kind":"namevalue", "type":["scalar"],"purpose":"Option"},
+        {"name":"binLimits", "kind":"namevalue", "type":["vector"]},
+        {"name":"numBins", "kind":"namevalue", "type":["scalar"]},
+        {"name":"binMethod", "kind":"namevalue", "type":["char", "choices={'auto','scott','fd','integers','sturges','sqrt'}"]},
+        {"name":"returnX", "kind":"namevalue", "type":["char", "choices={'binCalc','binCenters'}"]},
+        {"name":"includeMissing", "kind":"namevalue", "type":["logical"]}
+     ]
+  },
+  "binFun":
+  {
+     "inputs":
+     [
+        {"name":"x", "kind":"required", "type":["numeric"], "purpose":"dependant variable vector"},
+        {"name":"y", "kind":"ordered", "type":["numeric"], "purpose":"# independant variable vector"},
+        {"name":"binEdges", "kind":"ordered", "type":["vector"], "purpose":"bin edges"},
+        {"name":"binFunction", "kind":"namevalue", "type":["function_handle"],"purpose":"Option"},
+        {"name":"fillValue", "kind":"namevalue", "type":["scalar"],"purpose":"Option"},
+        {"name":"binLimits", "kind":"namevalue", "type":["vector"]},
+        {"name":"numBins", "kind":"namevalue", "type":["scalar"]},
+        {"name":"binMethod", "kind":"namevalue", "type":["char", "choices={'auto','scott','fd','integers','sturges','sqrt'}"]},
+        {"name":"returnX", "kind":"namevalue", "type":["char", "choices={'binCalc','binCenters'}"]},
+        {"name":"includeMissing", "kind":"namevalue", "type":["logical"]}
+     ]
+  }
+}

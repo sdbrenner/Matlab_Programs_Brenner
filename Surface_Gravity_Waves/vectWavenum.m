@@ -3,8 +3,10 @@ function [k,err] = vectWavenum(omega,depth,tolerance,num_iterations)
 % 
 %	k = vectWavenum(omega,depth) solves for the wave-numbers 'k' for a
 %	given depth that satisfy the dispersion relation:
-%   	omega^2 = k*tanh(k*depth)
-%	using the Newton-Raphson method.  The variables omega and depth can be
+%
+%   	omega^2 = g*k*tanh(k*depth)
+%	
+%   using the Newton-Raphson method.  The variables omega and depth can be
 %	arrays.
 % 
 %	k = vectWavenum(omega,depth,tolerance) assigns a tolerance value for
@@ -19,7 +21,7 @@ function [k,err] = vectWavenum(omega,depth,tolerance,num_iterations)
 %   then a default value of 10 is used.
 % 
 %	[k,err] = vectWavenum(omega,depth,...) returns the approximation error
-%   associated with each value 'k': err = abs( k*tanh(k*d) - omega^2 )
+%   associated with each value 'k': err = abs( g*k*tanh(k*d) - omega^2 )
 % 
 %	S.D.Brenner, April 2018
 

@@ -1,4 +1,4 @@
-function [avgA,avgB] = binAvg(A,B,binSize,binRange,func)
+function [binCents,avgB] = binAvg2(A,B,binSize,binRange,func)
 % BIN_AVG Average data within bins that are defined in terms of a dependent
 % variable.
 %
@@ -116,6 +116,17 @@ elseif ismatrix(B)
     rshpB = reshape( B, [1,M*N] );
     avgB = accumarray(subs,rshpB,[],func,NaN);
 end
+
+%% Re-categorize into defined bins
+
+binCents = mean( [binEdges(1:end-1) ; binEdges(2:end) ]);
+uBins = unique(bins);
+
+
+evenB = NaN(M,length(binCents));
+evenB(:,uBins) = avgB(:,uBins);
+avgB = evenB;
+
 
 %% Clean up data
 

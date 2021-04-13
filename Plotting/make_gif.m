@@ -4,7 +4,7 @@ if nargin == 2
 end
 
 for gif_idx = 1:length(im)
-    [A,map] = rgb2ind(im{gif_idx},256);
+    [A,map] = rgb2ind(im{gif_idx}.cdata,256);
     if gif_idx == 1
         imwrite(A,map,filename,'gif','LoopCount',Inf,'DelayTime',delaytime);
     else

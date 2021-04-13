@@ -1,4 +1,4 @@
-function bg_patch(patch_start,patch_end,colour,varargin)
+function p = bg_patch(patch_start,patch_end,colour,varargin)
 % BG_PATCH creates patches in the background of a figure
 % (e.g. highlighting periods of interest)
 %
@@ -67,7 +67,7 @@ function bg_patch(patch_start,patch_end,colour,varargin)
     for n = 1:num_patch
         patch_x = [patch_start(n),patch_end(n),patch_end(n),patch_start(n)];
         patch_y = YL([1,1,2,2]);
-        patch( patch_x,patch_y,colour,varargin{:} );
+        p(n) = patch( patch_x,patch_y,colour,varargin{:} );
     end
     hold off;
     

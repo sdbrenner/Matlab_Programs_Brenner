@@ -26,7 +26,7 @@ function colour = cinterp(data, clim, cmap)
 
 
 % Number of distinct colours in map:
-N = length(cmap);
+N = size(cmap,1);
 linear_color_vect = linspace(clim(1),clim(2),N);
 
 % interpolate each vector of colour individually
