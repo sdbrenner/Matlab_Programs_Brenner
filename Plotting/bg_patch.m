@@ -67,7 +67,7 @@ function p = bg_patch(patch_start,patch_end,colour,varargin)
     for n = 1:num_patch
         patch_x = [patch_start(n),patch_end(n),patch_end(n),patch_start(n)];
         patch_y = YL([1,1,2,2]);
-        p(n) = patch( patch_x,patch_y,colour,varargin{:} );
+        p(n) = patch( patch_x,patch_y,colour,varargin{:},'edgecolor','none' );
     end
     hold off;
     

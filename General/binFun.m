@@ -9,6 +9,15 @@ function [xBin,yBin] = binFun(X,varargin)
 %   [xBin,yBin] = binFun(x,y,binEdges) 
 %   [xBin,yBin] = binFun(...,Name,Value) 
 %
+%   Name-Value pairs (default):
+%       'binFunction'    ( @(x) mean(x,'omitnan') )
+%       'fillValue'      (NaN)
+%       'binLimits'      ([ min(x) , max(x) ])
+%       'numBins'           
+%       'binMethod'      ('auto')
+%       'returnX'        ('binCalc')
+%       'includeMissing' (true)
+%
 %   S.D.Brenner, 2020.
 
 %% Parse arguments

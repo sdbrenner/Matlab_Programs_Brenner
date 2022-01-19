@@ -7,7 +7,7 @@ function tH = panelLabel(n,offsetX,offsetY)
 %
 %   panelLabel(n,offset) allows for specification of the offset distance
 %   from the top left corner of the figure (in inches).  If
-%   offsetis not specificied, a default value of 0.1 inches is used.
+%   offset is not specificied, a default value of 0.1 inches is used.
 %
 %   panelLabel(n,offsetX,offsetY) allows separate specification of both the
 %   x- and y-offset.

@@ -135,8 +135,8 @@ ct = linspace( CT_range(1),CT_range(2) );
 sigma = gsw_sigma0(sa_mat,ct_mat);
 
 [c,hContour] = contour(sa,ct,sigma,'color',grey,'Levelstep',0.5); 
-clabel(c,hContour,'color',grey,'interpreter','latex') % default labels
-addlistener(hContour,'MarkedClean',@(a,b)ReFormatText(a));
+% clabel(c,hContour,'color',grey,'interpreter','latex') % default labels
+% addlistener(hContour,'MarkedClean',@(a,b)ReFormatText(a));
 
 
 %% Overlay T-S Points onto sigma curves
